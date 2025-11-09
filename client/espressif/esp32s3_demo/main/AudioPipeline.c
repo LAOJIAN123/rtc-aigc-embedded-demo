@@ -52,6 +52,11 @@ static const char *TAG = "AUDIO_PIPELINE";
 #define CHANNEL_FORMAT              I2S_CHANNEL_TYPE_RIGHT_LEFT
 #define ALGORITHM_INPUT_FORMAT      "MR"
 #define CHANNEL_NUM                 2
+#elif CONFIG_AUDIO_BOARD_FOGSEEK_ESP32S3
+#define ALGORITHM_STREAM_SAMPLE_BIT 32
+#define CHANNEL_FORMAT              I2S_CHANNEL_TYPE_RIGHT_LEFT
+#define ALGORITHM_INPUT_FORMAT      "RM"
+#define CHANNEL_NUM                 2
 #endif
 
 #if (RTC_DEMO_AUDIO_PIPELINE_CODEC_OPUS)
@@ -386,7 +391,7 @@ void player_pipeline_close(player_pipeline_handle_t player_pipeline){
     heap_caps_free(player_pipeline);
 };
 
-int player_pipeline_write(player_pipeline_handle_t player_pipeline, char *buffer, int buf_size){
-    raw_stream_write(player_pipeline->raw_writer, buffer, buf_size);
+int player_pipeline_write(player_pipeline_handle_t player_pipeline, const void *buffer, int buf_size){
+    raw_stream_write(player_pipeline->raw_writer, (char *)buffer, buf_size);
     return 0;
 };

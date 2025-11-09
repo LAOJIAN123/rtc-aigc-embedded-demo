@@ -39,7 +39,7 @@ player_pipeline_handle_t player_pipeline_open();
 void player_pipeline_run(player_pipeline_handle_t);
 void player_pipeline_close(player_pipeline_handle_t);
 int player_pipeline_get_default_read_size(player_pipeline_handle_t);
-int player_pipeline_write(player_pipeline_handle_t,char *buffer, int buf_size);
+int player_pipeline_write(player_pipeline_handle_t,const void *buffer, int buf_size);
 void player_pipeline_write_play_buffer_flag(player_pipeline_handle_t player_pipeline);
 
 #ifdef __cplusplus

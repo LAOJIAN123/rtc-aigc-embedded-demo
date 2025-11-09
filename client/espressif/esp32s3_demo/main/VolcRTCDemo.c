@@ -39,6 +39,8 @@
 #include "cJSON.h"
 #include "network.h"
 
+extern __byte_rtc_api__ void byte_rtc_destroy(byte_rtc_engine_t engine);
+
 #define STATS_TASK_PRIO     5
 
 static const char* TAG = "VolcRTCDemo";
@@ -56,7 +58,7 @@ static void byte_rtc_on_join_room_success(byte_rtc_engine_t engine, const char* 
     joined = true;
 };
 
-static void byte_rtc_on_rejoin_room_success(byte_rtc_engine_t engine, const char* channel, int elapsed_ms){
+static void __attribute__((unused)) byte_rtc_on_rejoin_room_success(byte_rtc_engine_t engine, const char* channel, int elapsed_ms){
     // g_byte_rtc_data.channel_joined = TRUE;
     ESP_LOGI(TAG, "rejoin channel success %s\n", channel);
 };
@@ -64,6 +66,7 @@ static void byte_rtc_on_rejoin_room_success(byte_rtc_engine_t engine, const char
 static void byte_rtc_on_user_joined(byte_rtc_engine_t engine, const char* channel, const char* user_name, int elapsed_ms){
     ESP_LOGI(TAG, "remote user joined  %s:%s\n", channel, user_name);
     engine_context_t* context = (engine_context_t *) byte_rtc_get_user_data(engine);
+    (void)context;
     strcpy(context->remote_uid, user_name);
 };
 
@@ -79,7 +82,7 @@ static void byte_rtc_on_user_mute_video(byte_rtc_engine_t engine, const char* ch
     ESP_LOGI(TAG, "remote user mute video  %s:%s %d\n", channel, user_name, muted);
 };
 
-static void byte_rtc_on_connection_lost(byte_rtc_engine_t engine, const char* channel){
+static void __attribute__((unused)) byte_rtc_on_connection_lost(byte_rtc_engine_t engine, const char* channel){
     ESP_LOGI(TAG, "connection Lost  %s\n", channel);
 };
 
@@ -425,6 +428,7 @@ void app_main(void)
 
     esp_periph_config_t periph_cfg = DEFAULT_ESP_PERIPH_SET_CONFIG();
     esp_periph_set_handle_t set = esp_periph_set_init(&periph_cfg);
+    (void)set;
 
    bool connected = configure_network();
    if (connected == false) {

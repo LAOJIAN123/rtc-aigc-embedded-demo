@@ -1,0 +1,17 @@
+{
+  "idf.espIdfPath": "/Users/linxiansheng/esp/esp-adf-v2.7/esp-idf",
+  "idf.toolsPath": "/Users/linxiansheng/.espressif",
+  "idf.pythonInstallPath": "/usr/bin/python3",
+  "idf.flashType": "UART",
+  "idf.port": "/dev/tty.usbmodem11401",
+  "idf.monitorPort": "/dev/tty.usbmodem11401",
+  "idf.customExtraVars": {
+    "IDF_TARGET": "esp32s3"
+  },
+  "clangd.path": "/Users/linxiansheng/.espressif/tools/esp-clang/esp-18.1.2_20240912/esp-clang/bin/clangd",
+  "clangd.arguments": [
+    "--background-index",
+    "--query-driver=/Users/linxiansheng/.espressif/tools/xtensa-esp-elf/esp-14.2.0_20241119/xtensa-esp-elf/bin/xtensa-esp32s3-elf-gcc",
+    "--compile-commands-dir=/Users/linxiansheng/Desktop/CODE/rtc/client/espressif/esp32s3_demo/build"
+  ]
+}
