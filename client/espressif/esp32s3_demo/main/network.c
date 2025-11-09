@@ -10,8 +10,17 @@
 #include <esp_log.h>
 #include <nvs.h>
 #include <nvs_flash.h>
+#include <string.h>
 
 #include "configuration_ap.h"
+
+#ifndef DEFAULT_WIFI_SSID
+#define DEFAULT_WIFI_SSID "DGUT"
+#endif
+
+#ifndef DEFAULT_WIFI_PASSWORD
+#define DEFAULT_WIFI_PASSWORD "82987776"
+#endif
 
 #define TAG "NETWORK"
 
@@ -96,6 +105,12 @@ bool configure_network()
     nvs_close(nvs_handle);
   }
   // Try to connect to WiFi, if failed, launch the WiFi configuration AP
+  if (network.ssid[0] == '\0' && strlen(DEFAULT_WIFI_SSID))
+  {
+    strlcpy(network.ssid, DEFAULT_WIFI_SSID, sizeof(network.ssid));
+    strlcpy(network.password, DEFAULT_WIFI_PASSWORD, sizeof(network.password));
+  }
+
   if (network.ssid[0] != '\0')
   {
     ESP_LOGI(TAG, "Connecting to WiFi %s", network.ssid);
@@ -152,7 +167,7 @@ bool configure_network()
     }
   }
 
-  if (!is_connected(network))
+  if (!is_connected())
   {
     configure_ap();
     ESP_LOGI(TAG, "WiFi not connected, starting AP");

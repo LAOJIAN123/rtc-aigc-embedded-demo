@@ -23,6 +23,13 @@ CONFIG_PARTITION_TABLE_MD5=y
 # end of Partition Table
 
 #
+# Example Configuration
+#
+CONFIG_RTC_APPID="67d51e0c3f66b3018f904e8c"
+CONFIG_AIGENT_SERVER_HOST="8.134.112.73:8082"
+# end of Example Configuration
+
+#
 # Compiler options
 #
 CONFIG_COMPILER_OPTIMIZATION_PERF=y

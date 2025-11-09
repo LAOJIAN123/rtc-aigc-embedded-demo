@@ -437,8 +437,12 @@ void app_main(void)
    }
 
     audio_board_handle_t board_handle = audio_board_init();   
-    audio_hal_ctrl_codec(board_handle->audio_hal, AUDIO_HAL_CODEC_MODE_BOTH, AUDIO_HAL_CTRL_START);
-    audio_hal_set_volume(board_handle->audio_hal, 80);
+    if (board_handle && board_handle->audio_hal) {
+        audio_hal_ctrl_codec(board_handle->audio_hal, AUDIO_HAL_CODEC_MODE_BOTH, AUDIO_HAL_CTRL_START);
+        audio_hal_set_volume(board_handle->audio_hal, 80);
+    } else {
+        ESP_LOGW(TAG, "Audio HAL not available, skip codec init");
+    }
     ESP_LOGI(TAG, "Starting again!\n");
 
     // Allow other core to finish initialization
