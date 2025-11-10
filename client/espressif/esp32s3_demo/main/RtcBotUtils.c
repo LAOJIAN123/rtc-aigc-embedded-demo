@@ -31,22 +31,10 @@ const char* common_headers[] = {
 };
 
 int start_voice_bot(rtc_room_info_t* room_info) {
-    char post_data[1024];
+    char post_data[512];
     cJSON *post_jobj = cJSON_CreateObject();
-#ifdef CONFIG_AUDIO_CODEC_TYPE_OPUS
-    cJSON_AddStringToObject(post_jobj, "audio_codec", "OPUS");
-    cJSON_AddStringToObject(post_jobj, "room_identifier", "OPUSLOW");
-#elif defined(CONFIG_AUDIO_CODEC_TYPE_PCM) || defined(CONFIG_AUDIO_CODEC_TYPE_G711A)
-    cJSON_AddStringToObject(post_jobj, "audio_codec", "G711A");
-#elif defined(CONFIG_AUDIO_CODEC_TYPE_G722)
-    cJSON_AddStringToObject(post_jobj, "audio_codec", "G722");
-#elif defined(CONFIG_AUDIO_CODEC_TYPE_AAC)
-    cJSON_AddStringToObject(post_jobj, "audio_codec", "AAC");
-#endif
-    // burst 功能
-    cJSON_AddBoolToObject(post_jobj, "enable_burst", 0); // 默认关闭
-    cJSON_AddNumberToObject(post_jobj, "burst_buffer_size", 500); // 500 ms
-    cJSON_AddNumberToObject(post_jobj, "burst_interval", 20);
+    cJSON_AddStringToObject(post_jobj, "end_point_id", CONFIG_RTC_ENDPOINT_ID);
+    cJSON_AddStringToObject(post_jobj, "voice_type", CONFIG_RTC_VOICE_TYPE);
 
     const char* json_str = cJSON_Print(post_jobj);
     strcpy(post_data, json_str);

@@ -20,7 +20,17 @@ config RTC_APPID
 
 config AIGENT_SERVER_HOST
     string "AIGC SERVER IP:PORT"
-    default "192.***.***.2:8080"
+    default "8.134.112.73:8082"
+    depends on VOLC_RTC_MODE
+
+config RTC_ENDPOINT_ID
+    string "Voice bot endpoint id"
+    default "ep-20250315144244-pwq9g"
+    depends on VOLC_RTC_MODE
+
+config RTC_VOICE_TYPE
+    string "Voice bot voice type"
+    default "BV001_streaming"
     depends on VOLC_RTC_MODE
 
 config COZE_SERVER_HOST
@@ -57,4 +67,24 @@ config AUDIO_CODEC_TYPE_AACLC
     bool "audio codec is aaclc, not support yet"
 
 endchoice
+
+# Multi-server connection reference commands:
+# Start voice chat
+# curl -X POST 'http://8.134.112.73:8082/startvoicechat' \
+#   --header 'Content-Type: application/json' \
+#   --header 'Authorization: af78e3067d51e0c3f66b3018f904e8c' \
+#   --data '{
+#     "end_point_id": "ep-20250315144244-pwq9g",
+#     "voice_type": "BV001_streaming"
+#   }'
+#
+# Stop voice chat
+# curl -X POST 'http://8.134.112.73:8082/stopvoicechat' \
+#   --header 'Content-Type: application/json' \
+#   --header 'Authorization: af78e3067d51e0c3f66b3018f904e8c' \
+#   --data '{
+#     "app_id": "67d51e0c3f66b3018f904e8c",
+#     "room_id": "TestRoom001",
+#     "task_id": "TestTask001"
+#   }'
 endmenu

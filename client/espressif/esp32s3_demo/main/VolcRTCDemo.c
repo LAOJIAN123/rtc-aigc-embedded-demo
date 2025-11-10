@@ -14,6 +14,7 @@
 #include "esp_system.h"
 #include "nvs_flash.h"
 #include "esp_netif.h"
+#include "esp_sntp.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_heap_task_info.h"
@@ -52,6 +53,34 @@ typedef struct {
     rtc_room_info_t* room_info;
     char remote_uid[128];
 } engine_context_t;
+
+static void initialize_sntp(void) {
+    ESP_LOGI(TAG, "Initializing SNTP");
+    sntp_setoperatingmode(SNTP_OPMODE_POLL);
+    sntp_setservername(0, "ntp1.aliyun.com");
+    sntp_setservername(1, "ntp.tencent.com");
+    sntp_setservername(2, "time.windows.com");
+    sntp_init();
+}
+
+static void wait_for_time_sync(void) {
+    int retry = 0;
+    const int retry_count = 10;
+    while (sntp_get_sync_status() == SNTP_SYNC_STATUS_RESET && retry++ < retry_count) {
+        ESP_LOGI(TAG, "Waiting for system time to be set... (%d/%d)", retry, retry_count);
+        vTaskDelay(pdMS_TO_TICKS(2000));
+    }
+
+    time_t now = 0;
+    struct tm timeinfo = {0};
+    time(&now);
+    localtime_r(&now, &timeinfo);
+    if (timeinfo.tm_year < (2016 - 1900)) {
+        ESP_LOGW(TAG, "System time sync failed, please check SNTP connectivity.");
+    } else {
+        ESP_LOGI(TAG, "Time synchronized: %s", asctime(&timeinfo));
+    }
+}
 // byte rtc lite callbacks
 static void byte_rtc_on_join_room_success(byte_rtc_engine_t engine, const char* channel, int elapsed_ms, bool rejoin) {
     ESP_LOGI(TAG, "join channel success %s elapsed %d ms now %d ms\n", channel, elapsed_ms, elapsed_ms);
@@ -330,7 +359,7 @@ static void byte_rtc_task(void *pvParameters) {
     };
 
     byte_rtc_engine_t engine = byte_rtc_create(room_info->app_id, &handler);
-    byte_rtc_set_log_level(engine, BYTE_RTC_LOG_LEVEL_ERROR);
+    byte_rtc_set_log_level(engine, BYTE_RTC_LOG_LEVEL_INFO);
     byte_rtc_set_params(engine, "{\"debug\":{\"log_to_console\":1}}");
 #ifdef RTC_DEMO_AUDIO_PIPELINE_CODEC_PCM
     byte_rtc_set_params(engine,"{\"audio\":{\"codec\":{\"internal\":{\"enable\":1}}}}");
@@ -435,6 +464,9 @@ void app_main(void)
        ESP_LOGE(TAG, "Failed to connect to network");
        return;
    }
+
+    initialize_sntp();
+    wait_for_time_sync();
 
     audio_board_handle_t board_handle = audio_board_init();   
     if (board_handle && board_handle->audio_hal) {
