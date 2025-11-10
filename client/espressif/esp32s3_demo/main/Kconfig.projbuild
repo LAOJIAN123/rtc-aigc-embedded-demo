@@ -68,6 +68,22 @@ config AUDIO_CODEC_TYPE_AACLC
 
 endchoice
 
+config ZLIB
+    bool "Enable zlib compression support"
+    default y
+    help
+        Keep this option enabled to make sure the managed espressif/zlib component
+        is compiled into the firmware so compressed HTTP/TCP payloads can be handled.
+
+config MBEDTLS_ZLIB
+    bool "Expose zlib helpers inside the application"
+    default y
+    depends on ZLIB
+    help
+        Provides a project level knob that can be used to guard any future logic
+        requiring zlib-aware integrations such as TLS helpers or custom
+        decompression code paths.
+
 # Multi-server connection reference commands:
 # Start voice chat
 # curl -X POST 'http://8.134.112.73:8082/startvoicechat' \

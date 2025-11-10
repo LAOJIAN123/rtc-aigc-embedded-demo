@@ -32,6 +32,13 @@ CONFIG_RTC_VOICE_TYPE="BV001_streaming"
 # end of Example Configuration
 
 #
+# Compression Support
+#
+CONFIG_ZLIB=y
+CONFIG_MBEDTLS_ZLIB=y
+# end of Example Configuration
+
+#
 # Compiler options
 #
 CONFIG_COMPILER_OPTIMIZATION_PERF=y

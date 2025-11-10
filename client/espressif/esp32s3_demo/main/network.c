@@ -15,11 +15,11 @@
 #include "configuration_ap.h"
 
 #ifndef DEFAULT_WIFI_SSID
-#define DEFAULT_WIFI_SSID "DGUT"
+#define DEFAULT_WIFI_SSID "林先生的iPhone"
 #endif
 
 #ifndef DEFAULT_WIFI_PASSWORD
-#define DEFAULT_WIFI_PASSWORD "82987776"
+#define DEFAULT_WIFI_PASSWORD "23500235"
 #endif
 
 #define TAG "NETWORK"

@@ -361,6 +361,8 @@ static void byte_rtc_task(void *pvParameters) {
     byte_rtc_engine_t engine = byte_rtc_create(room_info->app_id, &handler);
     byte_rtc_set_log_level(engine, BYTE_RTC_LOG_LEVEL_INFO);
     byte_rtc_set_params(engine, "{\"debug\":{\"log_to_console\":1}}");
+    // Disable payload compression explicitly to avoid relying on remote zlib support.
+     byte_rtc_set_params(engine, "{\"signaling\":{\"enable_zip\":0}}");
 #ifdef RTC_DEMO_AUDIO_PIPELINE_CODEC_PCM
     byte_rtc_set_params(engine,"{\"audio\":{\"codec\":{\"internal\":{\"enable\":1}}}}");
 #endif
